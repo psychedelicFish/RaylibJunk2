@@ -18,6 +18,8 @@ namespace RaylibJunk2.Managers
 
         Scene? currentScene;
 
+        public Scene CurrentScene { get => currentScene; }
+
         public void Update(float deltaTime)
         {
             if (currentScene != null)

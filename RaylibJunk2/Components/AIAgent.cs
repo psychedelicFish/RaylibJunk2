@@ -13,5 +13,18 @@ namespace RaylibJunk2.Components
 		{
 
 		}
-	}
+
+        public override void Draw()
+        {
+            base.Draw();
+
+            // ToDo: add draw path here
+        }
+
+        public override void Update(float deltaTime)
+        {
+            base.Update(deltaTime);
+        }
+
+    }
 }

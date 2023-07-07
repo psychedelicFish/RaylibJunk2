@@ -117,7 +117,10 @@ namespace RaylibJunk2.Managers
         }
 
 
-
+        public static void AddGameObjectToCurrentScene(GameObject go)
+        {
+            sceneManager.CurrentScene.AddGameObjectToScene(go);
+        }
 
     }
 }
