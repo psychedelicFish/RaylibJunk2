@@ -32,7 +32,7 @@ namespace RaylibJunk2
         public virtual void Draw()
         {}
 
-        public virtual void Update()
+        public virtual void Update(float deltaTime)
         {}
 
         /// <summary>

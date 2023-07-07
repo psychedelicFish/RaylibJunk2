@@ -49,10 +49,11 @@ namespace RaylibJunk2.Physics
                 //This will be where we apply gravity
 
                 acceleration += GameManager.physicsManager.gravity * gravityScale * fixedDeltaTime;
+                parent.transform.LocalPosition += velocity * fixedDeltaTime + acceleration;
             }
 
 
-            parent.transform.LocalPosition += velocity * fixedDeltaTime;
+            
         }
 
         public void AddImpulse(Vector2 force)

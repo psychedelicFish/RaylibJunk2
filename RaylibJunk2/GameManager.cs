@@ -7,6 +7,7 @@ namespace RaylibJunk2
     {
         public static GameManager instance;
         public static PhysicsManager physicsManager;
+        public static SceneManager sceneManager;
         public int windowWidth { get; private set; }
         public int windowHeight { get; private set; }
         public int targetFPS { get; private set; }
@@ -38,7 +39,7 @@ namespace RaylibJunk2
         { 
             Raylib.ClearBackground(Color.MAGENTA);
             Raylib.BeginDrawing();
-           
+            sceneManager.Draw();
             Raylib.EndDrawing();
             
         }
@@ -51,7 +52,7 @@ namespace RaylibJunk2
                 currentFixedCount -= fixedDelta;
             }
 
-
+            sceneManager.Update(deltaTime);
 
         }
         
