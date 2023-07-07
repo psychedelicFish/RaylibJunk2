@@ -1,7 +1,6 @@
 ﻿using Raylib_cs;
-using RaylibJunk2.Physics;
 
-namespace RaylibJunk2
+namespace RaylibJunk2.Managers
 {
     internal class GameManager
     {
@@ -16,7 +15,7 @@ namespace RaylibJunk2
         public float deltaTime { get; private set; }
 
         private float currentFixedCount = 0.0f;
-        
+
 
         public GameManager() : this(450, 450, 165)
         {
@@ -36,17 +35,17 @@ namespace RaylibJunk2
         }
 
         private void Draw()
-        { 
+        {
             Raylib.ClearBackground(Color.MAGENTA);
             Raylib.BeginDrawing();
             sceneManager.Draw();
             Raylib.EndDrawing();
-            
+
         }
         private void Update()
         {
             currentFixedCount += deltaTime;
-            if(currentFixedCount > fixedDelta)
+            if (currentFixedCount > fixedDelta)
             {
                 physicsManager.FixedUpdate(fixedDelta);
                 currentFixedCount -= fixedDelta;
@@ -55,7 +54,7 @@ namespace RaylibJunk2
             sceneManager.Update(deltaTime);
 
         }
-        
+
         public void Run()
         {
             DateTime start, end;
@@ -73,7 +72,7 @@ namespace RaylibJunk2
             }
         }
 
-       
+
 
 
     }

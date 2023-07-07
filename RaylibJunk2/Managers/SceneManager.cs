@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RaylibJunk2.Components.Scenes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RaylibJunk2
+namespace RaylibJunk2.Managers
 {
     internal class SceneManager
     {

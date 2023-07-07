@@ -1,7 +1,9 @@
 ﻿
 using Constants;
+using RaylibJunk2.Components;
+using RaylibJunk2.GameObjects;
 
-namespace RaylibJunk2.Physics
+namespace RaylibJunk2.Colliders
 {
     internal class Collider : Component
     {

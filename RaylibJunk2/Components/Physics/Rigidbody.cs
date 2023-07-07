@@ -1,7 +1,9 @@
-﻿using System.Numerics;
+﻿using RaylibJunk2.GameObjects;
+using RaylibJunk2.Managers;
+using System.Numerics;
 
 
-namespace RaylibJunk2.Physics
+namespace RaylibJunk2.Components.Physics
 {
     class Rigidbody : Component
     {
@@ -23,7 +25,7 @@ namespace RaylibJunk2.Physics
             isKinematic = false;
             drag = 0.05f;
             acceleration = Vector2.Zero;
-            RegisterRigidbody(this);  
+            RegisterRigidbody(this);
         }
 
         public Rigidbody(GameObject parent, float mass, Vector2 velocity, float gravityScale, float drag, bool isKinematic) : base(parent)
@@ -53,7 +55,7 @@ namespace RaylibJunk2.Physics
             }
 
 
-            
+
         }
 
         public void AddImpulse(Vector2 force)

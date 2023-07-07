@@ -1,6 +1,7 @@
-﻿using System.Numerics;
+﻿using RaylibJunk2.GameObjects;
+using System.Numerics;
 
-namespace RaylibJunk2.Physics
+namespace RaylibJunk2.Colliders
 {
     internal class CircleCollider : Collider
     {

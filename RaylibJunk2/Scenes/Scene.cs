@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RaylibJunk2
+namespace RaylibJunk2.Components.Scenes
 {
     internal class Scene
     {
@@ -18,7 +18,7 @@ namespace RaylibJunk2
 
         public virtual void Update(float deltaTime)
         {
-            for(int i = 0; i < objects.Count; i++)
+            for (int i = 0; i < objects.Count; i++)
             {
                 objects[i].Update(deltaTime);
             }

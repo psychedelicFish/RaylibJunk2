@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using System;
 
-namespace RaylibJunk2.Physics
+namespace RaylibJunk2.Managers
 {
     internal class PhysicsManager
     {
@@ -31,7 +31,7 @@ namespace RaylibJunk2.Physics
         //Every 0.016;
         public void FixedUpdate(float fixedDelta)
         {
-            foreach(Rigidbody rb in rigidbodies)
+            foreach (Rigidbody rb in rigidbodies)
             {
                 rb.UpdateStep(fixedDelta);
             }

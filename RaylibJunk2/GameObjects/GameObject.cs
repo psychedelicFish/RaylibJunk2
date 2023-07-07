@@ -1,7 +1,8 @@
-﻿using System;
+﻿using RaylibJunk2.Components;
+using System;
 using System.Numerics;
 
-namespace RaylibJunk2
+namespace RaylibJunk2.GameObjects
 {
     class GameObject
     {
@@ -30,10 +31,10 @@ namespace RaylibJunk2
         }
 
         public virtual void Draw()
-        {}
+        { }
 
         public virtual void Update(float deltaTime)
-        {}
+        { }
 
         /// <summary>
         /// RETURNS THE FIRST COMPONENT OF TYPE IT FINDS
@@ -43,11 +44,11 @@ namespace RaylibJunk2
         /// <returns></returns>
         public Component? GetComponent<T>(T component)
         {
-            if(!(component is Component))
+            if (!(component is Component))
             {
                 return null;
             }
-            for(int i = 0; i < components.Count; i++)
+            for (int i = 0; i < components.Count; i++)
             {
                 if (components[i] is T)
                 {
