@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 //using Raylib_cs;
 
 namespace RaylibJunk2.AI
@@ -51,10 +52,10 @@ namespace RaylibJunk2.AI
 
 		public void Draw()
 		{
-			foreach(var node in navagationMesh)
+			Parallel.For(0, navagationMesh.Count, i =>
 			{
-				Raylib_cs.Raylib.DrawCircle((int)node.transform.LocalPosition.X, (int)node.transform.LocalPosition.Y, 2, Raylib_cs.Color.LIME);
-			}
+				Raylib_cs.Raylib.DrawCircle((int)navagationMesh[i].transform.LocalPosition.X, (int)navagationMesh[i].transform.LocalPosition.Y, 2, Raylib_cs.Color.LIME);
+			});
 		}
 
 	}
