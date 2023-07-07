@@ -1,4 +1,5 @@
-﻿using RaylibJunk2.GameObjects;
+﻿using RaylibJunk2.Colliders;
+using RaylibJunk2.GameObjects;
 using RaylibJunk2.Managers;
 using System.Numerics;
 
@@ -15,6 +16,8 @@ namespace RaylibJunk2.Components.Physics
         public bool isKinematic { get; private set; }
         public float drag { get; private set; }
 
+        protected List<Collider> colliders = new List<Collider>();
+
 
 
         public Rigidbody(GameObject parent) : base(parent)
@@ -23,7 +26,17 @@ namespace RaylibJunk2.Components.Physics
             velocity = Vector2.Zero;
             gravityScale = 1;
             isKinematic = false;
-            drag = 0.05f;
+            drag = 0.5f;
+            acceleration = Vector2.Zero;
+            RegisterRigidbody(this);
+        }
+        public Rigidbody(GameObject parent, bool isKinematic) : base(parent)
+        {
+            mass = 1;
+            velocity = Vector2.Zero;
+            gravityScale = 1;
+            this.isKinematic = isKinematic;
+            drag = 0.5f;
             acceleration = Vector2.Zero;
             RegisterRigidbody(this);
         }
@@ -71,6 +84,28 @@ namespace RaylibJunk2.Components.Physics
         private void RegisterRigidbody(Rigidbody body)
         {
             GameManager.physicsManager.RegisterRigidbody(body);
+        }
+
+        public void AddCollider(Collider collider)
+        {
+            colliders.Add(collider);
+        }
+
+
+        public void CheckForCollisions(Rigidbody rb)
+        {
+            if (rb == this || colliders.Count <= 0 || rb.colliders.Count <= 0)
+            {
+                return;
+            }
+            foreach(Collider c in colliders)
+            {
+                foreach(Collider o in rb.colliders)
+                {
+                    c.CheckForCollisions(o);
+                }
+            }
+            
         }
     }
 }

@@ -34,5 +34,13 @@ namespace RaylibJunk2.Components.Scenes
             }
         }
 
+
+        public void AddGameObjectToScene(GameObject obj)
+        {
+            objects.Add(obj);
+        }
+
+
+
     }
 }

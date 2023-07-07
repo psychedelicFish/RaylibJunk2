@@ -1,4 +1,10 @@
 ﻿using Raylib_cs;
+using RaylibJunk2.Components.Scenes;
+using RaylibJunk2.GameObjects;
+using RaylibJunk2.Components;
+using System.Numerics;
+using RaylibJunk2.Components.Physics;
+using RaylibJunk2.Colliders;
 
 namespace RaylibJunk2.Managers
 {
@@ -30,18 +36,45 @@ namespace RaylibJunk2.Managers
             windowWidth = width;
             windowHeight = height;
             targetFPS = fps;
-            fixedDelta = 1 / targetFPS;
+            fixedDelta = 1.0f/(float)fps;
             physicsManager = new PhysicsManager();
             sceneManager = new SceneManager();
             Raylib.SetTargetFPS(targetFPS);
             Raylib.InitWindow(windowWidth, windowHeight, "game");
+
+            //Test falling empty sprite
+            Scene scene = new Scene(0, true);
+            GameObject testObject = new GameObject(new Components.Transform(new Vector2(width/2, height / 2)));
+            testObject.AddComponent(new SpriteRenderer(testObject));
+            Rigidbody rb = new Rigidbody(testObject);
+            
+            CircleCollider cc = new CircleCollider(30 ,testObject, 0, true);
+            rb.AddCollider(cc);
+            testObject.AddComponent(rb);
+            testObject.AddComponent(cc);
+            cc.SubscribeStay((other) => { Console.WriteLine("Hello"); });
+
+            GameObject kinematicTest = new GameObject(new Components.Transform(new Vector2(width / 2, height / 2 + 50.0f)));
+            kinematicTest.AddComponent(new SpriteRenderer(kinematicTest));
+            rb = new Rigidbody(kinematicTest, true);
+            cc = new CircleCollider(30, kinematicTest, 1, true);
+            rb.AddCollider(cc);
+            kinematicTest.AddComponent(rb);
+            kinematicTest.AddComponent(cc);
+            
+            scene.AddGameObjectToScene(testObject);
+            scene.AddGameObjectToScene(kinematicTest);
         }
+
+
 
         private void Draw()
         {
-            Raylib.ClearBackground(Color.MAGENTA);
+            Raylib.ClearBackground(Color.BLACK);
             Raylib.BeginDrawing();
+            
             sceneManager.Draw();
+            
             Raylib.EndDrawing();
 
         }
@@ -50,9 +83,9 @@ namespace RaylibJunk2.Managers
             currentFixedCount += deltaTime;
             if (currentFixedCount > fixedDelta)
             {
-                physicsManager.FixedUpdate(fixedDelta);
                 currentFixedCount -= fixedDelta;
             }
+            physicsManager.FixedUpdate(deltaTime);
 
             sceneManager.Update(deltaTime);
 

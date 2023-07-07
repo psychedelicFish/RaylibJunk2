@@ -6,7 +6,7 @@ namespace RaylibJunk2.Managers
 {
     internal class PhysicsManager
     {
-        public readonly Vector2 gravity = new Vector2(0, -9.8f);
+        public readonly Vector2 gravity = new Vector2(0, 9.8f);
 
         List<Rigidbody> rigidbodies = new List<Rigidbody>();
 
@@ -34,7 +34,9 @@ namespace RaylibJunk2.Managers
         {
             foreach (Rigidbody rb in rigidbodies)
             {
+                Parallel.For(0, rigidbodies.Count, i => { rigidbodies[i].CheckForCollisions(rb); });
                 rb.UpdateStep(fixedDelta);
+                
             }
         }
     }

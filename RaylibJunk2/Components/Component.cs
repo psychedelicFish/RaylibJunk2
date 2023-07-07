@@ -15,7 +15,7 @@ namespace RaylibJunk2.Components
             this.parent = parent;
         }
 
-        public virtual void Update() { }
+        public virtual void Update(float deltaTime) { }
         public virtual void Draw() { }
     }
 }
