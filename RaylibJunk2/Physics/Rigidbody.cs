@@ -1,11 +1,10 @@
 ﻿using System.Numerics;
-using RaylibJunk2.Physics.Intefaces;
+
 
 namespace RaylibJunk2.Physics
 {
-    internal class Rigidbody : Component
+    class Rigidbody : Component
     {
-
 
         public float mass { get; private set; }
         public Vector2 velocity { get; private set; }
