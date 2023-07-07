@@ -7,7 +7,7 @@ namespace RaylibJunk2
     {
         static void Main(string[] args)
         {
-            GameManager gameManager = new GameManager();
+            GameManager gameManager = new GameManager(900,900,60);
             gameManager.Run();
 
             

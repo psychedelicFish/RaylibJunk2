@@ -21,7 +21,7 @@ namespace RaylibJunk2.AI
 			}
 
 			public Transform transform = new Transform();
-			bool passable;
+			public bool passable;
 		}
 
 
@@ -29,20 +29,25 @@ namespace RaylibJunk2.AI
 
 		float nodeDistance;
 		Vector2 navagationAreaMax, navagationAreaMin;
+		public bool debugging = false;
 
-		public AIManager(Vector2 navagationAreaMax, Vector2 navagationAreaMin, float nodeDistance)
+		public AIManager(Vector2 navagationAreaMax, Vector2 navagationAreaMin, float nodeDistance, bool debugging = false)
 		{
 			this.navagationAreaMax = navagationAreaMax;
 			this.navagationAreaMin = navagationAreaMin;
 			this.nodeDistance = nodeDistance;
 
-			for(float x = navagationAreaMin.X; x < navagationAreaMax.X; x += nodeDistance)
+			this.debugging = debugging;
+
+			for (float x = navagationAreaMin.X; x < navagationAreaMax.X; x += nodeDistance)
 			{
-				for(float y = navagationAreaMin.Y; y < navagationAreaMax.Y; y += nodeDistance)
+				for (float y = navagationAreaMin.Y; y < navagationAreaMax.Y; y += nodeDistance)
 				{
 					navagationMesh.Add(new NavagationNode(new Vector2(x, y)));
 				}
 			}
+
+			this.debugging = debugging;
 		}
 
 		public void Update()
@@ -52,10 +57,26 @@ namespace RaylibJunk2.AI
 
 		public void Draw()
 		{
-			Parallel.For(0, navagationMesh.Count, i =>
+			if (debugging)
 			{
-				Raylib_cs.Raylib.DrawCircle((int)navagationMesh[i].transform.LocalPosition.X, (int)navagationMesh[i].transform.LocalPosition.Y, 2, Raylib_cs.Color.LIME);
-			});
+				for (int i = 0; i < navagationMesh.Count; i++)
+				{
+					if (navagationMesh[i].passable)
+						Raylib_cs.Raylib.DrawCircle((int)navagationMesh[i].transform.LocalPosition.X, (int)navagationMesh[i].transform.LocalPosition.Y, 2, Raylib_cs.Color.GREEN);
+					else
+						Raylib_cs.Raylib.DrawCircle((int)navagationMesh[i].transform.LocalPosition.X, (int)navagationMesh[i].transform.LocalPosition.Y, 2, Raylib_cs.Color.RED);
+				}
+			}
+		}
+
+		public Vector2[] GetNavagationPath(Vector2 from, Vector2 to)
+		{
+			List<Vector2> path = new List<Vector2>();
+
+
+
+
+			return path.ToArray();
 		}
 
 	}
