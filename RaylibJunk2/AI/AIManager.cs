@@ -1,8 +1,10 @@
-﻿using System;
+﻿using RaylibJunk2.Components;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using Raylib_cs;
 
 namespace RaylibJunk2.AI
 {
@@ -10,17 +12,36 @@ namespace RaylibJunk2.AI
 	{
 		class NavagationNode
 		{
-			Transform transform;
+
+			public NavagationNode(Vector2 position)
+			{
+				transform.LocalPosition = position;
+				passable = true;
+			}
+
+			public Transform transform = new Transform();
 			bool passable;
 		}
 
 
 		List<NavagationNode> navagationMesh = new List<NavagationNode>();
 
+		float nodeDistance;
+		Vector2 navagationAreaMax, navagationAreaMin;
 
-		public AIManager()
+		public AIManager(Vector2 navagationAreaMax, Vector2 navagationAreaMin, float nodeDistance)
 		{
+			this.navagationAreaMax = navagationAreaMax;
+			this.navagationAreaMin = navagationAreaMin;
+			this.nodeDistance = nodeDistance;
 
+			for(float x = navagationAreaMin.X; x < navagationAreaMax.X; x += nodeDistance)
+			{
+				for(float y = navagationAreaMin.Y; y < navagationAreaMax.Y; y += nodeDistance)
+				{
+					navagationMesh.Add(new NavagationNode(new Vector2(x, y)));
+				}
+			}
 		}
 
 		public void Update()
@@ -30,7 +51,10 @@ namespace RaylibJunk2.AI
 
 		public void Draw()
 		{
-
+			foreach(var node in navagationMesh)
+			{
+				Raylib_cs.Raylib.DrawCircle((int)node.transform.LocalPosition.X, (int)node.transform.LocalPosition.Y, 2, Raylib_cs.Color.LIME);
+			}
 		}
 
 	}
