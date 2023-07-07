@@ -7,6 +7,7 @@ namespace RaylibJunk2.GameObjects
     class GameObject
     {
         public Transform transform { get; private set; }
+        public Vector2 position { get => transform.LocalPosition;}   
 
         protected List<Component> components = new List<Component>();
 

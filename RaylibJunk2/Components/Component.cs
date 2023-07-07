@@ -16,5 +16,6 @@ namespace RaylibJunk2.Components
         }
 
         public virtual void Update() { }
+        public virtual void Draw() { }
     }
 }

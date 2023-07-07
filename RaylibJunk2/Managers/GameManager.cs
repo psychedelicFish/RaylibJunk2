@@ -32,6 +32,9 @@ namespace RaylibJunk2.Managers
             targetFPS = fps;
             fixedDelta = 1 / targetFPS;
             physicsManager = new PhysicsManager();
+            sceneManager = new SceneManager();
+            Raylib.SetTargetFPS(targetFPS);
+            Raylib.InitWindow(windowWidth, windowHeight, "game");
         }
 
         private void Draw()
@@ -70,6 +73,12 @@ namespace RaylibJunk2.Managers
                 end = DateTime.UtcNow;
                 deltaTime = end.Second - start.Second;
             }
+            End();
+        }
+
+        public void End()
+        {
+            Raylib.CloseWindow();
         }
 
 

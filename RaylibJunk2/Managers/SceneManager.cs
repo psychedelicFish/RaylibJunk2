@@ -20,12 +20,16 @@ namespace RaylibJunk2.Managers
 
         public void Update(float deltaTime)
         {
-            currentScene.Update(deltaTime);
+            if (currentScene != null)
+            {
+                currentScene.Update(deltaTime);
+            }
         }
 
         public void Draw()
         {
-            currentScene.Draw();
+            if(currentScene != null)
+                currentScene.Draw();
         }
 
         public void AddToScenes(Scene scene, bool current)

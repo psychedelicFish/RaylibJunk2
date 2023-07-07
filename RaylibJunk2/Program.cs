@@ -8,8 +8,7 @@ namespace RaylibJunk2
         static void Main(string[] args)
         {
             GameManager gameManager = new GameManager();
-            Raylib.SetTargetFPS(gameManager.targetFPS);
-            Raylib.InitWindow(gameManager.windowWidth, gameManager.windowHeight, "game");
+            gameManager.Run();
 
             
         }
