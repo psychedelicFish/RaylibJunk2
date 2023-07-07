@@ -11,7 +11,7 @@ namespace RaylibJunk2.AI
 {
 	class AIManager
 	{
-		class NavagationNode
+		public class NavagationNode
 		{
 
 			public NavagationNode(Vector2 position)
@@ -30,13 +30,14 @@ namespace RaylibJunk2.AI
 		float nodeDistance;
 		Vector2 navagationAreaMax, navagationAreaMin;
 		public bool debugging = false;
+		AISearchPattern searchPattern;
 
-		public AIManager(Vector2 navagationAreaMax, Vector2 navagationAreaMin, float nodeDistance, bool debugging = false)
+		public AIManager(Vector2 navagationAreaMax, Vector2 navagationAreaMin, float nodeDistance, AISearchPattern searchPattern, bool debugging = false)
 		{
 			this.navagationAreaMax = navagationAreaMax;
 			this.navagationAreaMin = navagationAreaMin;
 			this.nodeDistance = nodeDistance;
-
+			this.searchPattern = searchPattern;
 			this.debugging = debugging;
 
 			for (float x = navagationAreaMin.X; x < navagationAreaMax.X; x += nodeDistance)
@@ -46,7 +47,7 @@ namespace RaylibJunk2.AI
 					navagationMesh.Add(new NavagationNode(new Vector2(x, y)));
 				}
 			}
-
+			searchPattern.RegisterNavMesh(navagationMesh);
 			this.debugging = debugging;
 		}
 
@@ -73,7 +74,7 @@ namespace RaylibJunk2.AI
 		{
 			List<Vector2> path = new List<Vector2>();
 
-
+			path.AddRange(searchPattern.GetPath(from, to));
 
 
 			return path.ToArray();

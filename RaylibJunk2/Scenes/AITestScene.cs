@@ -1,5 +1,8 @@
-﻿using RaylibJunk2.Components.Scenes;
+﻿using RaylibJunk2.AI;
+using RaylibJunk2.AI.SearchPatterns;
+using RaylibJunk2.Components.Scenes;
 using RaylibJunk2.GameObjects;
+using RaylibJunk2.Managers;
 using System.Numerics;
 
 namespace RaylibJunk2.Scenes
@@ -12,7 +15,7 @@ namespace RaylibJunk2.Scenes
 
 		public AITestScene(int index, bool current = false) : base(index, current)
 		{
-			aiManager = new AI.AIManager(new System.Numerics.Vector2(900, 900), new System.Numerics.Vector2(0, 0), 10, true);
+			aiManager = new AI.AIManager(new System.Numerics.Vector2(900, 900), new System.Numerics.Vector2(0, 0), 10, new AStarPattern(), true);
 
 			// Setup the test AI agent
 
@@ -31,7 +34,9 @@ namespace RaylibJunk2.Scenes
 				Vector2 mousePos = new Vector2();
                 mousePos.X = Raylib_cs.Raylib.GetMouseX();
 				mousePos.Y = Raylib_cs.Raylib.GetMouseY();
-
+				//aiManager.GetNavagationPath(agent.transform.LocalPosition, mousePos);
+				aiManager.GetNavagationPath(mousePos, mousePos);
+				//GetNavagationPath
 				// send to test object to get a new path to walk
 			}
 		}
