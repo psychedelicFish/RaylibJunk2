@@ -55,5 +55,13 @@ namespace RaylibJunk2.Colliders
 
             return false;
         }
+        
+        public override void Draw()
+        {
+            Raylib_cs.Raylib.DrawRectangleV(parent.position, scale, Raylib_cs.Color.BLUE);
+            
+        }
+        
     }
+
 }

@@ -36,6 +36,7 @@ namespace RaylibJunk2.Colliders
             //if no longer colliding remove from list 
             //call exit 
         }
+        
 
 
         public override void Update(float deltaTime)
@@ -48,6 +49,14 @@ namespace RaylibJunk2.Colliders
                 {
                     if(isTrigger)
                         OnTriggerStay(overlaps[i]);
+                }
+                else
+                {
+                    if (isTrigger)
+                    {
+                        OnTriggerExit(overlaps[i]);
+                    }
+                    overlaps.Remove(overlaps[i]);
                 }
             }
 

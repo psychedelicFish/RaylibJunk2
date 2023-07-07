@@ -48,19 +48,21 @@ namespace RaylibJunk2.Managers
             testObject.AddComponent(new SpriteRenderer(testObject));
             Rigidbody rb = new Rigidbody(testObject);
             
-            CircleCollider cc = new CircleCollider(30 ,testObject, 0, true);
+            CircleCollider cc = new CircleCollider(15 ,testObject, 0, true);
             rb.AddCollider(cc);
             testObject.AddComponent(rb);
             testObject.AddComponent(cc);
-            cc.SubscribeStay((other) => { Console.WriteLine("Hello"); });
-
+            cc.SubscribeEnter((other) => { Console.WriteLine("Enter"); });
+            cc.SubscribeStay((other) => { Console.WriteLine("Stay"); });
+            cc.SubscribeExit((other) => { Console.WriteLine("Exit"); });
             GameObject kinematicTest = new GameObject(new Components.Transform(new Vector2(width / 2, height / 2 + 50.0f)));
             kinematicTest.AddComponent(new SpriteRenderer(kinematicTest));
             rb = new Rigidbody(kinematicTest, true);
-            cc = new CircleCollider(30, kinematicTest, 1, true);
-            rb.AddCollider(cc);
+            BoxCollider bx = new BoxCollider(kinematicTest, new Vector2(25, 25), 1);
+            //cc = new CircleCollider(15, kinematicTest, 1, true);
+            rb.AddCollider(bx);
             kinematicTest.AddComponent(rb);
-            kinematicTest.AddComponent(cc);
+            kinematicTest.AddComponent(bx);
             
             scene.AddGameObjectToScene(testObject);
             scene.AddGameObjectToScene(kinematicTest);

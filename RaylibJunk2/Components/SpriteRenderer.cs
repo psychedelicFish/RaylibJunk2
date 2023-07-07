@@ -20,6 +20,11 @@ namespace RaylibJunk2.Components
             }
             else
             {
+                Rectangle rec = new Rectangle(0, 0, 25, 25);
+                //Raylib.DrawRectanglePro(rec, parent.position, 0, Color.MAGENTA);
+                
+
+
                 Raylib.DrawRectangleV(parent.position, new System.Numerics.Vector2(25, 25), Color.MAGENTA);
             }
                 
