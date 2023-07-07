@@ -8,17 +8,19 @@ namespace RaylibJunk2.Colliders
     internal class Collider : Component
     {
         public ColliderType type { get; protected set; }
+        public bool isTrigger {get; protected set; }
         bool colliding = false;
+
         public int id { get; private set; }
         protected List<Collider> overlaps = new List<Collider>();
 
         public delegate void CollisionCallback(Collider other);
         CollisionCallback? Enter, Exit, Stay;
 
-        public Collider(GameObject parent, int id) : base(parent)
+        public Collider(GameObject parent, int id, bool isTrigger = false) : base(parent)
         {
             this.id = id;
-
+            this.isTrigger = isTrigger;
         }
 
         public virtual bool CheckForCollisions(Collider other)
@@ -36,7 +38,7 @@ namespace RaylibJunk2.Colliders
         }
 
 
-        public override void Update()
+        public override void Update(float deltaTime)
         {
 
             //CheckForCollisions();
@@ -44,26 +46,35 @@ namespace RaylibJunk2.Colliders
             {
                 if (CheckStillColliding(overlaps[i]))
                 {
-                    OnCollisionStay(overlaps[i]);
+                    if(isTrigger)
+                        OnTriggerStay(overlaps[i]);
                 }
             }
 
         }
         public void OnCollisionEnter(Collider other)
         {
+            if(Enter != null)
+            {
+                Enter(other);
+            }
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
             if (Enter != null)
             {
                 Enter(other);
             }
         }
-        public void OnCollisionStay(Collider other)
+        public void OnTriggerStay(Collider other)
         {
             if (Stay != null)
             {
                 Stay(other);
             }
         }
-        public void OnCollisionExit(Collider other)
+        public void OnTriggerExit(Collider other)
         {
             if (Exit != null)
             {

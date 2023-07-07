@@ -10,7 +10,7 @@ namespace RaylibJunk2.Colliders
         {
             type = Constants.ColliderType.CIRCLE;
         }
-        public CircleCollider(float radius, GameObject parent, int id) : base(parent, id)
+        public CircleCollider(float radius, GameObject parent, int id, bool isTrigger = false) : base(parent, id, isTrigger)
         {
             this.radius = radius;
         }
@@ -32,9 +32,12 @@ namespace RaylibJunk2.Colliders
                 var circle = other as CircleCollider;
                 if (Vector2.Distance(circle.parent.transform.LocalPosition, parent.transform.LocalPosition) < radius + circle.radius)
                 {
-                    if (overlaps.Contains(circle))
+                    if (!overlaps.Contains(circle))
                         overlaps.Add(circle);
-                    OnCollisionEnter(circle);
+                    if(isTrigger)
+                        OnTriggerEnter(circle);
+                    else
+                        OnCollisionEnter(circle);
                     return true;
                 }
             }
@@ -68,8 +71,11 @@ namespace RaylibJunk2.Colliders
             {
                 return true;
             }
-            OnCollisionExit(other);
+            if(isTrigger)
+                OnTriggerExit(other);
+            
             overlaps.Remove(other);
+            
             return false;
             //if no longer colliding remove from list 
             //call exit 

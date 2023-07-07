@@ -18,6 +18,10 @@ namespace RaylibJunk2.Components
             {
                 Raylib.DrawTextureV(currentSprite.texture, parent.transform.LocalPosition, currentSprite.color);
             }
+            else
+            {
+                Raylib.DrawRectangleV(parent.position, new System.Numerics.Vector2(25, 25), Color.MAGENTA);
+            }
                 
         }
 

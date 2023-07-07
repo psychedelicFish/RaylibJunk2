@@ -16,7 +16,7 @@ namespace RaylibJunk2.Managers
 
         public List<Scene> sceneList = new List<Scene>();
 
-        Scene currentScene;
+        Scene? currentScene;
 
         public void Update(float deltaTime)
         {
@@ -40,6 +40,8 @@ namespace RaylibJunk2.Managers
                 currentScene = scene;
             }
         }
+
+        
 
     }
 }

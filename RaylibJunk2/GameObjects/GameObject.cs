@@ -32,10 +32,24 @@ namespace RaylibJunk2.GameObjects
         }
 
         public virtual void Draw()
-        { }
+        { 
+           for(int i = 0; i < components.Count; i++)
+            {
+                components[i].Draw();
+            }
+        
+        }
 
         public virtual void Update(float deltaTime)
-        { }
+        {
+
+            for (int i = 0; i < components.Count; i++)
+            {
+                components[i].Update(deltaTime);
+            }
+
+
+        }
 
         /// <summary>
         /// RETURNS THE FIRST COMPONENT OF TYPE IT FINDS
