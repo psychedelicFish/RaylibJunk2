@@ -1,4 +1,5 @@
 ﻿using RaylibJunk2.Components.Scenes;
+using RaylibJunk2.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,9 @@ namespace RaylibJunk2.Scenes
 	internal class AITestScene : Scene
 	{
 		AI.AIManager aiManager;
+
+		GameObject agent;
+
 		public AITestScene(int index, bool current = false) : base(index, current)
 		{
 			aiManager = new AI.AIManager(new System.Numerics.Vector2(900, 900), new System.Numerics.Vector2(0, 0), 10, true);
