@@ -2,6 +2,7 @@
 using Constants;
 using RaylibJunk2.Components;
 using RaylibJunk2.GameObjects;
+using RaylibJunk2.Managers;
 
 namespace RaylibJunk2.Colliders
 {
@@ -61,6 +62,9 @@ namespace RaylibJunk2.Colliders
             }
 
         }
+
+
+        #region OnCollisions
         public void OnCollisionEnter(Collider other)
         {
             if(Enter != null)
@@ -69,6 +73,19 @@ namespace RaylibJunk2.Colliders
             }
         }
 
+        public void OnCollisionExit(Collider other)
+        {
+            if(Exit != null)
+            {
+                Exit(other);
+            }
+        }
+
+        #endregion
+
+
+
+        #region OnTriggers
         public void OnTriggerEnter(Collider other)
         {
             if (Enter != null)
@@ -90,7 +107,7 @@ namespace RaylibJunk2.Colliders
                 Exit(other);
             }
         }
-
+        #endregion
         public void SubscribeEnter(CollisionCallback callback)
         {
             Enter -= callback;

@@ -73,12 +73,12 @@ namespace RaylibJunk2.Components.Physics
 
         public void AddImpulse(Vector2 force)
         {
-            velocity += force / mass;
+            velocity += force * -mass;
         }
 
         public void AddForce(Vector2 force, float fixedDeltaTime)
         {
-            velocity += force * fixedDeltaTime / mass;
+            velocity += force * fixedDeltaTime * -mass;
         }
 
         private void RegisterRigidbody(Rigidbody body)
