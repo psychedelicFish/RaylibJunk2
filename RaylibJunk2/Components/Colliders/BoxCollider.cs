@@ -1,4 +1,5 @@
-﻿using RaylibJunk2.GameObjects;
+﻿using RaylibJunk2.Components.Physics;
+using RaylibJunk2.GameObjects;
 using System.Numerics;
 
 namespace RaylibJunk2.Colliders
@@ -8,10 +9,11 @@ namespace RaylibJunk2.Colliders
         public Vector2 scale { get; private set; }
 
 
-        public BoxCollider(GameObject parent, Vector2 scale, int id) : base(parent, id)
+        public BoxCollider(GameObject parent, Vector2 scale, int id, bool isTrigger = false, Rigidbody? connected = null) : base(parent, id, isTrigger, connected)
         {
             this.scale = scale;
             type = Constants.ColliderType.BOX;
+            
         }
 
         public override bool CheckForCollisions(Collider other)
@@ -27,8 +29,8 @@ namespace RaylibJunk2.Colliders
             if (other.type == Constants.ColliderType.CIRCLE)
             {
                 CircleCollider circle = other as CircleCollider;
-                var circleDistanceX = Math.Abs(circle.parent.transform.LocalPosition.X - parent.transform.LocalPosition.X);
-                var circleDistanceY = Math.Abs(circle.parent.transform.LocalPosition.Y - parent.transform.LocalPosition.Y);
+                var circleDistanceX = Math.Abs(circle.parent.transform.LocalPosition.X - parent.transform.LocalPosition.X - scale.X / 2);
+                var circleDistanceY = Math.Abs(circle.parent.transform.LocalPosition.Y - parent.transform.LocalPosition.Y - scale.Y / 2);
 
                 if (circleDistanceX > scale.X / 2 + circle.radius) { return false; }
                 if (circleDistanceY > scale.Y / 2 + circle.radius) { return false; }
@@ -58,7 +60,9 @@ namespace RaylibJunk2.Colliders
         
         public override void Draw()
         {
-            Raylib_cs.Raylib.DrawRectangleV(parent.position, scale, Raylib_cs.Color.BLUE);
+            Raylib_cs.Rectangle rect = new Raylib_cs.Rectangle(parent.position.X, parent.position.Y, scale.X, scale.Y); 
+            Raylib_cs.Raylib.DrawRectanglePro(rect, new Vector2(0,0), 0, Raylib_cs.Color.GREEN);
+            
             
         }
         

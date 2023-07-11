@@ -5,6 +5,7 @@ using RaylibJunk2.Components;
 using System.Numerics;
 using RaylibJunk2.Components.Physics;
 using RaylibJunk2.Colliders;
+using RaylibJunk2.Scenes;
 
 namespace RaylibJunk2.Managers
 {
@@ -20,7 +21,7 @@ namespace RaylibJunk2.Managers
         public float fixedDelta { get; private set; }
         public float deltaTime { get; private set; }
 
-        private float currentFixedCount = 0.0f;
+        public float currentFixedCount { get; private set; } = 0.0f;
 
 
         public GameManager() : this(450, 450, 165)
@@ -36,36 +37,15 @@ namespace RaylibJunk2.Managers
             windowWidth = width;
             windowHeight = height;
             targetFPS = fps;
-            fixedDelta = 1.0f/(float)fps;
+            fixedDelta = 1f/fps;
             physicsManager = new PhysicsManager();
             sceneManager = new SceneManager();
             Raylib.SetTargetFPS(targetFPS);
             Raylib.InitWindow(windowWidth, windowHeight, "game");
 
             //Test falling empty sprite
-            Scene scene = new Scene(0, true);
-            GameObject testObject = new GameObject(new Components.Transform(new Vector2(width/2, height / 2)));
-            testObject.AddComponent(new SpriteRenderer(testObject));
-            Rigidbody rb = new Rigidbody(testObject);
+            PhysicsScene scene = new PhysicsScene(0, true);
             
-            CircleCollider cc = new CircleCollider(15 ,testObject, 0, true);
-            rb.AddCollider(cc);
-            testObject.AddComponent(rb);
-            testObject.AddComponent(cc);
-            cc.SubscribeEnter((other) => { Console.WriteLine("Enter"); });
-            cc.SubscribeStay((other) => { Console.WriteLine("Stay"); });
-            cc.SubscribeExit((other) => { Console.WriteLine("Exit"); });
-            GameObject kinematicTest = new GameObject(new Components.Transform(new Vector2(width / 2, height / 2 + 50.0f)));
-            kinematicTest.AddComponent(new SpriteRenderer(kinematicTest));
-            rb = new Rigidbody(kinematicTest, true);
-            BoxCollider bx = new BoxCollider(kinematicTest, new Vector2(25, 25), 1);
-            //cc = new CircleCollider(15, kinematicTest, 1, true);
-            rb.AddCollider(bx);
-            kinematicTest.AddComponent(rb);
-            kinematicTest.AddComponent(bx);
-            
-            scene.AddGameObjectToScene(testObject);
-            scene.AddGameObjectToScene(kinematicTest);
         }
 
 
@@ -85,9 +65,9 @@ namespace RaylibJunk2.Managers
             currentFixedCount += deltaTime;
             if (currentFixedCount > fixedDelta)
             {
+                physicsManager.FixedUpdate(fixedDelta);
                 currentFixedCount -= fixedDelta;
             }
-            physicsManager.FixedUpdate(deltaTime);
 
             sceneManager.Update(deltaTime);
 
@@ -106,7 +86,7 @@ namespace RaylibJunk2.Managers
 
                 Draw();
                 end = DateTime.UtcNow;
-                deltaTime = end.Second - start.Second;
+                deltaTime = (float)end.Millisecond - (float)start.Millisecond / 1000;
             }
             End();
         }

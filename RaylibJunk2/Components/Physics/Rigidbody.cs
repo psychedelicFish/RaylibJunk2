@@ -56,15 +56,19 @@ namespace RaylibJunk2.Components.Physics
         {
             if (!isKinematic)
             {
-                if (velocity.Length() != 0)
-                    acceleration -= Vector2.Normalize(velocity) * drag * fixedDeltaTime;
+                
 
 
+               
                 //TODO:
                 //This will be where we apply gravity
+                acceleration = GameManager.physicsManager.gravity * gravityScale;
+                if (velocity.Length() != 0)
+                    velocity -= Vector2.Normalize(velocity) * drag;
 
-                acceleration += GameManager.physicsManager.gravity * gravityScale * fixedDeltaTime;
-                parent.transform.LocalPosition += velocity * fixedDeltaTime + acceleration;
+                velocity += acceleration;
+                
+                parent.transform.LocalPosition += velocity * fixedDeltaTime;
             }
 
 
@@ -91,7 +95,10 @@ namespace RaylibJunk2.Components.Physics
             colliders.Add(collider);
         }
 
-
+        public void ResetVelocity()
+        {
+            velocity = Vector2.Zero;
+        }
         public void CheckForCollisions(Rigidbody rb)
         {
             if (rb == this || colliders.Count <= 0 || rb.colliders.Count <= 0)

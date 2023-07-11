@@ -1,4 +1,6 @@
-﻿using RaylibJunk2.GameObjects;
+﻿using Constants;
+using RaylibJunk2.Components.Physics;
+using RaylibJunk2.GameObjects;
 using System.Numerics;
 
 namespace RaylibJunk2.Colliders
@@ -10,13 +12,14 @@ namespace RaylibJunk2.Colliders
         {
             type = Constants.ColliderType.CIRCLE;
         }
-        public CircleCollider(float radius, GameObject parent, int id, bool isTrigger = false) : base(parent, id, isTrigger)
+        public CircleCollider(float radius, GameObject parent, int id, bool isTrigger = false, Rigidbody? connected = null) : base(parent, id, isTrigger, connected)
         {
             this.radius = radius;
+            
         }
 
 
-        
+
 
         public override bool CheckForCollisions(Collider other)
         {
@@ -37,10 +40,10 @@ namespace RaylibJunk2.Colliders
                 {
                     if (!overlaps.Contains(circle))
                         overlaps.Add(circle);
-                    if(isTrigger)
+                    if (isTrigger)
                         OnTriggerEnter(circle);
                     else
-                        OnCollisionEnter(circle);
+                        OnCollisionEnter(circle, Direction.UP, 0, new Vector2(0,0));
                     return true;
                 }
             }
@@ -50,55 +53,99 @@ namespace RaylibJunk2.Colliders
             else if (other.type == Constants.ColliderType.BOX)
             {
                 BoxCollider box = other as BoxCollider;
-                var circleDistanceX = Math.Abs(parent.transform.LocalPosition.X - box.parent.transform.LocalPosition.X);
-                var circleDistanceY = Math.Abs(parent.transform.LocalPosition.Y - box.parent.transform.LocalPosition.Y);
+                //var circleDistanceX = Math.Abs(parent.transform.LocalPosition.X - box.parent.transform.LocalPosition.X);
+                //var circleDistanceY = Math.Abs(parent.transform.LocalPosition.Y - box.parent.transform.LocalPosition.Y);
 
-                if (circleDistanceX > box.scale.X / 2 + radius) 
-                { 
-                    return false; 
-                }
-                if (circleDistanceY > box.scale.Y / 2 + radius) 
-                { 
-                    return false; 
-                }
+                Vector2 ballCentre = parent.transform.LocalPosition;// - new Vector2(radius);
+                
+                Vector2 boxHalfExtents = new Vector2(box.scale.X / 2, box.scale.Y / 2);
+                Vector2 boxCentre = new Vector2(box.parent.transform.LocalPosition.X + boxHalfExtents.X,
+                        box.parent.transform.LocalPosition.Y + boxHalfExtents.Y);
 
-                if (circleDistanceX <= box.scale.X / 2) 
+                Vector2 difference = ballCentre - boxCentre;
+                Vector2 clamped = Vector2.Clamp(difference, -boxHalfExtents, boxHalfExtents);
+                Vector2 closest = boxCentre + clamped;
+
+                difference = closest - ballCentre;
+
+                if (difference.Length() < radius)
                 {
-                    if (!overlaps.Contains(box))
-                        overlaps.Add(box);
-                    if (isTrigger)
-                        OnTriggerEnter(box);
+                    Direction d = VectorDirection(difference);
+                    float pen = 0;
+                    if (d == Direction.LEFT || d == Direction.RIGHT)
+                    {
+                        pen = radius - Math.Abs(difference.X);
+                    }
                     else
-                        OnCollisionEnter(box);
-                    return true; 
-                }
-                if (circleDistanceY <= box.scale.Y / 2)
-                {
-                    if (!overlaps.Contains(box))
-                        overlaps.Add(box);
-                    if (isTrigger)
-                        OnTriggerEnter(box);
-                    else
-                        OnCollisionEnter(box);
+                    {
+                        pen = radius - Math.Abs(difference.Y);
+                    }
+
+                    OnCollisionEnter(box, d, pen, closest);
                     return true;
                 }
+                return false;
 
-                var cornerDistance_sq = (circleDistanceX - box.scale.X / 2) * (circleDistanceX - box.scale.X / 2) +
-                                     (circleDistanceY - box.scale.Y / 2) * (circleDistanceY - box.scale.Y / 2);
+                //Get Centre point of circle 
+                //Get Centre point of box
+                //Get Diffrence between both centers
+                //Clamp the difference between -half extents, half extents
+                //Retrieve & Return the vector between centre circle & closest Point 
+                //If length < radius collision!
 
-                bool colliding = cornerDistance_sq <= radius * radius;
-                if (colliding)
-                {
-                    if (!overlaps.Contains(box))
-                        overlaps.Add(box);
-                    if (isTrigger)
-                        OnTriggerEnter(box);
-                    else
-                        OnCollisionEnter(box);
-                    return true;
-                }
+                //    Vector2 direction = parent.transform.LocalPosition - box.parent.transform.LocalPosition;
+
+                //    Vector2 clampDifference = Vector2.Clamp(direction, box.scale / -2, box.scale / 2);
+                //    Vector2 closestPoint = box.parent.position + clampDifference;
+
+                //    if (circleDistanceX > box.scale.X / 2 + radius) 
+                //    { 
+                //        return false; 
+                //    }
+                //    if (circleDistanceY > box.scale.Y / 2 + radius) 
+                //    { 
+                //        return false; 
+                //    }
+
+                //    if (circleDistanceX <= box.scale.X / 2) 
+                //    {
+                //        if (!overlaps.Contains(box))
+                //            overlaps.Add(box);
+                //        if (isTrigger)
+                //            OnTriggerEnter(box);
+                //        else
+
+                //        return true; 
+                //    }
+                //    if (circleDistanceY <= box.scale.Y / 2)
+                //    {
+                //        if (!overlaps.Contains(box))
+                //            overlaps.Add(box);
+                //        if (isTrigger)
+                //            OnTriggerEnter(box);
+                //        else
+                //            OnCollisionEnter(box, new Vector2(circleDistanceX, circleDistanceY).Length());
+                //        return true;
+                //    }
+
+                //    var cornerDistance_sq = (circleDistanceX - box.scale.X / 2) * (circleDistanceX - box.scale.X / 2) +
+                //                         (circleDistanceY - box.scale.Y / 2) * (circleDistanceY - box.scale.Y / 2);
+
+                //    bool colliding = cornerDistance_sq <= radius * radius;
+                //    if (colliding)
+                //    {
+                //        if (!overlaps.Contains(box))
+                //            overlaps.Add(box);
+                //        if (isTrigger)
+                //            OnTriggerEnter(box);
+                //        else
+                //            OnCollisionEnter(box, new Vector2(circleDistanceX, circleDistanceY).Length());
+                //        return true;
+                //    }
+                //}
+
+                //return false;
             }
-
             return false;
         }
 
@@ -119,8 +166,11 @@ namespace RaylibJunk2.Colliders
             else if (other.type == Constants.ColliderType.BOX)
             {
                 BoxCollider box = other as BoxCollider;
-                var circleDistanceX = Math.Abs(parent.transform.LocalPosition.X - box.parent.transform.LocalPosition.X);
-                var circleDistanceY = Math.Abs(parent.transform.LocalPosition.Y - box.parent.transform.LocalPosition.Y);
+                var circleDistanceX = Math.Abs(parent.transform.LocalPosition.X - box.parent.transform.LocalPosition.X - box.scale.X);
+                var circleDistanceY = Math.Abs(parent.transform.LocalPosition.Y - box.parent.transform.LocalPosition.Y - box.scale.Y);
+
+                
+
 
                 if (circleDistanceX > box.scale.X / 2 + radius) { return false; }
                 if (circleDistanceY > box.scale.Y / 2 + radius) { return false; }
