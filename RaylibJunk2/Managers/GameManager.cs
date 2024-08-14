@@ -6,12 +6,15 @@ using System.Numerics;
 using RaylibJunk2.Components.Physics;
 using RaylibJunk2.Colliders;
 using RaylibJunk2.Scenes;
+using System.Diagnostics.Contracts;
 
 namespace RaylibJunk2.Managers
 {
     internal class GameManager
     {
         public static GameManager instance;
+
+ 
         public static PhysicsManager physicsManager;
         public static SceneManager sceneManager;
         public int windowWidth { get; private set; }
@@ -26,7 +29,11 @@ namespace RaylibJunk2.Managers
 
         public GameManager() : this(450, 450, 165)
         {
-            instance = this;
+            if (instance == null)
+            {
+                instance = this;
+            }
+
             windowWidth = 450;
             windowHeight = 450;
             targetFPS = 165;
@@ -41,10 +48,12 @@ namespace RaylibJunk2.Managers
             physicsManager = new PhysicsManager();
             sceneManager = new SceneManager();
             Raylib.SetTargetFPS(targetFPS);
-            Raylib.InitWindow(windowWidth, windowHeight, "game");
+            Raylib.InitWindow(windowWidth, windowHeight, "PhysicsThingo");
 
             //Test falling empty sprite
             PhysicsScene scene = new PhysicsScene(0, true);
+            sceneManager.AddToScenes(scene, true);
+
             
         }
 
@@ -80,9 +89,9 @@ namespace RaylibJunk2.Managers
             while (!Raylib.WindowShouldClose())
             {
                 start = DateTime.UtcNow;
-
-
+               
                 Update();
+                
 
                 Draw();
                 end = DateTime.UtcNow;

@@ -4,6 +4,12 @@ namespace RaylibJunk2
 {
     internal class Sprite
     {
+
+        public Sprite(string filePath)
+        {
+            LoadSprite(filePath);
+        }
+
         public Texture2D texture { get; private set; }
         public Color color { get; private set; }
 

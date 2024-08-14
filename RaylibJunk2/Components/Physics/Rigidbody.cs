@@ -54,40 +54,44 @@ namespace RaylibJunk2.Components.Physics
 
         public void UpdateStep(float fixedDeltaTime)
         {
+            //IsKinematic == true means physics is not applied to this object 
             if (!isKinematic)
             {
-                
-
-
                
-                //TODO:
-                //This will be where we apply gravity
+                //Calculating acceleration to be applied by gravity. 
                 acceleration = GameManager.physicsManager.gravity * gravityScale;
                 if (velocity.Length() != 0)
-                    velocity -= Vector2.Normalize(velocity) * drag;
+                    velocity -= Vector2.Normalize(velocity) * drag; //Apply drag to the object
 
-                velocity += acceleration;
-                
-                parent.transform.LocalPosition += velocity * fixedDeltaTime;
+                velocity += acceleration; //Apply acceleration
+
+                parent.transform.LocalPosition += velocity * fixedDeltaTime; //Apply velocity 
             }
 
 
 
         }
 
+        public void ChangeVelocity(Vector2 change)
+        {
+            velocity = change;
+        }
+
+        //Add Impulse
         public void AddImpulse(Vector2 force)
         {
-            velocity += force * -mass;
+            velocity += force * -mass; // multiply by negative mass to avoid divide by zero
         }
 
         public void AddForce(Vector2 force, float fixedDeltaTime)
         {
-            velocity += force * fixedDeltaTime * -mass;
+            velocity += force * fixedDeltaTime * -mass; // multiply by negative mass to avoid divide by zero
         }
 
+        //Function used to register the rigidbody with the physics manager
         private void RegisterRigidbody(Rigidbody body)
         {
-            GameManager.physicsManager.RegisterRigidbody(body);
+            GameManager.physicsManager.RegisterRigidbody(body); 
         }
 
         public void AddCollider(Collider collider)
@@ -99,9 +103,12 @@ namespace RaylibJunk2.Components.Physics
         {
             velocity = Vector2.Zero;
         }
+        
+        //Function that runs through its colliders and checks for collisions
         public void CheckForCollisions(Rigidbody rb)
         {
-            if (rb == this || colliders.Count <= 0 || rb.colliders.Count <= 0)
+            //If we are checking against ourself OR we have no colliders OR the other body has not colliders
+            if (rb == this || colliders.Count <= 0 || rb.colliders.Count <= 0) 
             {
                 return;
             }

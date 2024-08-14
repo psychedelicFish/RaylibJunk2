@@ -25,7 +25,8 @@ namespace RaylibJunk2.Colliders
                     return true;
                 }
             }
-
+            //Box V Circle Collision
+            //https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/
             if (other.type == Constants.ColliderType.CIRCLE)
             {
                 CircleCollider circle = other as CircleCollider;
@@ -43,7 +44,8 @@ namespace RaylibJunk2.Colliders
 
                 return cornerDistance_sq <= circle.radius * circle.radius;
             }
-
+            //https://www.geeksforgeeks.org/find-two-rectangles-overlap/
+            //BOX V BOX Collision
             else if (other.type == Constants.ColliderType.BOX)
             {
                 BoxCollider box = other as BoxCollider;

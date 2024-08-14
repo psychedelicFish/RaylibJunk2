@@ -4,12 +4,13 @@ using System.Numerics;
 
 namespace RaylibJunk2.GameObjects
 {
+    //Base Gameobject Class
     class GameObject
     {
-        public Transform transform { get; private set; }
+        public Transform transform { get; protected set; } //Transform getter with protected set
         public Vector2 position { get => transform.LocalPosition;}   
 
-        protected List<Component> components = new List<Component>();
+        protected List<Component> components = new List<Component>(); //List of components that are attached. Modeled after the Unity Component System
 
         public GameObject()
         {
@@ -31,6 +32,8 @@ namespace RaylibJunk2.GameObjects
             transform.AddChild(toBeAdded.transform);
         }
 
+
+        //Draw -> Handles the components draw. 
         public virtual void Draw()
         { 
            for(int i = 0; i < components.Count; i++)
@@ -39,7 +42,7 @@ namespace RaylibJunk2.GameObjects
             }
         
         }
-
+        //Update -> Handles the components update
         public virtual void Update(float deltaTime)
         {
 
@@ -51,12 +54,8 @@ namespace RaylibJunk2.GameObjects
 
         }
 
-        /// <summary>
-        /// RETURNS THE FIRST COMPONENT OF TYPE IT FINDS
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="component"></param>
-        /// <returns></returns>
+        //Get Component Function, Returns the first component of the type wanted 
+        //Else returns null
         public Component? GetComponent<T>(T component)
         {
             if (!(component is Component))

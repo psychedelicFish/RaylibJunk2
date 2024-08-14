@@ -32,7 +32,9 @@ namespace RaylibJunk2.Colliders
             }
 
 
-            //Circle to circle collision
+        //Circle to circle collision
+        //https://codeguppy.com/blog/how-to-implement-collision-detection-between-two-circles-using-p5.js/index.html#:~:text=If%20the%20distance%20is%20greater,then%20the%20circles%20are%20colliding.
+        //https://www.geeksforgeeks.org/check-two-given-circles-touch-intersect/
             if (other.type == Constants.ColliderType.CIRCLE)
             {
                 var circle = other as CircleCollider;
@@ -43,18 +45,26 @@ namespace RaylibJunk2.Colliders
                     if (isTrigger)
                         OnTriggerEnter(circle);
                     else
-                        OnCollisionEnter(circle, Direction.UP, 0, new Vector2(0,0));
+                    {
+                        Vector2 direction = Vector2.Normalize(parent.position - circle.parent.position);
+                        float distance = (parent.position - circle.parent.position).Length();
+                        float radiusCombined = radius + circle.radius;
+                        float depth = radiusCombined - distance;
+
+
+                        OnCollisionEnter(circle, Direction.NONE, depth, direction * depth);
+                    }
                     return true;
                 }
             }
 
 
             //Cicle collider to AABB
+            //https://www.geeksforgeeks.org/check-if-any-point-overlaps-the-given-circle-and-rectangle/
             else if (other.type == Constants.ColliderType.BOX)
             {
                 BoxCollider box = other as BoxCollider;
-                //var circleDistanceX = Math.Abs(parent.transform.LocalPosition.X - box.parent.transform.LocalPosition.X);
-                //var circleDistanceY = Math.Abs(parent.transform.LocalPosition.Y - box.parent.transform.LocalPosition.Y);
+
 
                 Vector2 ballCentre = parent.transform.LocalPosition;// - new Vector2(radius);
                 
@@ -85,66 +95,7 @@ namespace RaylibJunk2.Colliders
                     return true;
                 }
                 return false;
-
-                //Get Centre point of circle 
-                //Get Centre point of box
-                //Get Diffrence between both centers
-                //Clamp the difference between -half extents, half extents
-                //Retrieve & Return the vector between centre circle & closest Point 
-                //If length < radius collision!
-
-                //    Vector2 direction = parent.transform.LocalPosition - box.parent.transform.LocalPosition;
-
-                //    Vector2 clampDifference = Vector2.Clamp(direction, box.scale / -2, box.scale / 2);
-                //    Vector2 closestPoint = box.parent.position + clampDifference;
-
-                //    if (circleDistanceX > box.scale.X / 2 + radius) 
-                //    { 
-                //        return false; 
-                //    }
-                //    if (circleDistanceY > box.scale.Y / 2 + radius) 
-                //    { 
-                //        return false; 
-                //    }
-
-                //    if (circleDistanceX <= box.scale.X / 2) 
-                //    {
-                //        if (!overlaps.Contains(box))
-                //            overlaps.Add(box);
-                //        if (isTrigger)
-                //            OnTriggerEnter(box);
-                //        else
-
-                //        return true; 
-                //    }
-                //    if (circleDistanceY <= box.scale.Y / 2)
-                //    {
-                //        if (!overlaps.Contains(box))
-                //            overlaps.Add(box);
-                //        if (isTrigger)
-                //            OnTriggerEnter(box);
-                //        else
-                //            OnCollisionEnter(box, new Vector2(circleDistanceX, circleDistanceY).Length());
-                //        return true;
-                //    }
-
-                //    var cornerDistance_sq = (circleDistanceX - box.scale.X / 2) * (circleDistanceX - box.scale.X / 2) +
-                //                         (circleDistanceY - box.scale.Y / 2) * (circleDistanceY - box.scale.Y / 2);
-
-                //    bool colliding = cornerDistance_sq <= radius * radius;
-                //    if (colliding)
-                //    {
-                //        if (!overlaps.Contains(box))
-                //            overlaps.Add(box);
-                //        if (isTrigger)
-                //            OnTriggerEnter(box);
-                //        else
-                //            OnCollisionEnter(box, new Vector2(circleDistanceX, circleDistanceY).Length());
-                //        return true;
-                //    }
-                //}
-
-                //return false;
+            
             }
             return false;
         }

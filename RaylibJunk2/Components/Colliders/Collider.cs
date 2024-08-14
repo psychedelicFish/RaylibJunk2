@@ -12,7 +12,7 @@ namespace RaylibJunk2.Colliders
     {
         public ColliderType type { get; protected set; }
         public bool isTrigger { get; protected set; }
-        bool colliding = false;
+       
         public Rigidbody? connectedRigidbody;
         public int id { get; private set; }
         
@@ -185,54 +185,34 @@ namespace RaylibJunk2.Colliders
         {
             if (connectedRigidbody != null && other.connectedRigidbody != null)
             {
-                Console.WriteLine("Boing");
-
-                 
-                Vector2 normal = parent.transform.LocalPosition - hitLocation; 
-                //float overlap = penetration;
-                normal = Vector2.Normalize(normal);
-
-                if(direction == Direction.LEFT)
+                Vector2 normal; 
+                if(other.type == ColliderType.CIRCLE && type == ColliderType.CIRCLE)
                 {
-                    parent.transform.LocalPosition += new Vector2(penetration, 0);
-                }
-                else if(direction == Direction.RIGHT)
-                {
-                    parent.transform.LocalPosition -= new Vector2(penetration, 0);
-                }
-                else if(direction == Direction.UP)
-                {
-                    parent.transform.LocalPosition -= new Vector2(0, penetration);
+                    normal = parent.transform.LocalPosition - other.parent.transform.LocalPosition;
                 }
                 else
                 {
-                    parent.transform.LocalPosition += new Vector2(0, penetration);
+                    normal = parent.transform.LocalPosition - hitLocation;
                 }
-                
+                normal = Vector2.Normalize(normal);
 
-                //if (!other.connectedRigidbody.isKinematic)
-                //{
-                //    other.parent.transform.LocalPosition += overlap * 0.5f * normal;
-                //    parent.transform.LocalPosition -= overlap * 0.5f * normal;
-                //}
-                //else
-                //{
-                //    parent.transform.LocalPosition += overlap * normal;
+               
 
-                //}
+                parent.transform.LocalPosition += normal * penetration;
 
                 Vector2 relativeVelocity = connectedRigidbody.velocity - other.connectedRigidbody.velocity;
                 //relativeVelocity = Vector2.Normalize(relativeVelocity);
-                float velocityAlongNormal = Vector2.Dot(relativeVelocity, normal);
-                connectedRigidbody.ResetVelocity();
 
-                if (velocityAlongNormal < 0)
-                {
-                    Vector2 impulse = 0.7f * velocityAlongNormal * normal;
-                    connectedRigidbody.AddImpulse(impulse);
-                    if (!other.connectedRigidbody.isKinematic)
-                        other.connectedRigidbody.AddImpulse(impulse);
-                }
+                float velocityAlongNormal = Vector2.Dot(relativeVelocity, normal);
+
+                Vector2 impulse = connectedRigidbody.velocity - 1.7f * normal * (Vector2.Dot(normal, connectedRigidbody.velocity));
+
+                //connectedRigidbody.AddImpulse(impulse);
+                connectedRigidbody.ChangeVelocity(impulse);
+                if (!other.connectedRigidbody.isKinematic)
+                    other.connectedRigidbody.AddImpulse(impulse);
+                
+                
 
             }
 
